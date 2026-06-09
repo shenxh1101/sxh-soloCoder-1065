@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components';
 import classnames from 'classnames';
 import { Bill } from '@/types';
 import { useFinanceStore } from '@/store/useFinanceStore';
-import { formatMoney, formatDateCN } from '@/utils/format';
+import { formatMoney, formatDateCN, formatRecurring } from '@/utils/format';
 import CategoryIcon from '@/components/CategoryIcon';
 import styles from './index.module.scss';
 
@@ -22,16 +22,14 @@ const BillItem: React.FC<BillItemProps> = ({ bill, onClick }) => {
     <View className={styles.billItem} onClick={onClick}>
       <View className={styles.left}>
         {category && (
-          <CategoryIcon icon={category.icon} color={category.color} size="sm" />
+          <CategoryIcon category={category} size="sm" />
         )}
         <View className={styles.info}>
           <View className={styles.row}>
             <Text className={styles.categoryName}>{category?.name || '未分类'}</Text>
             {bill.recurring !== 'none' && (
               <View className={styles.recurringTag}>
-                <Text className={styles.recurringText}>
-                  {bill.recurring === 'daily' ? '每日' : bill.recurring === 'weekly' ? '每周' : bill.recurring === 'monthly' ? '每月' : '每年'}
-                </Text>
+                <Text className={styles.recurringText}>🔄 {formatRecurring(bill.recurring)}</Text>
               </View>
             )}
           </View>

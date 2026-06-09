@@ -2,28 +2,316 @@
 
 .page {
   min-height: 100vh;
+  background: $color-bg;
+  padding-bottom: 180rpx;
+}
+
+.header {
+  padding: $spacing-3xl $spacing-xl $spacing-2xl;
+  border-radius: 0 0 40rpx 40rpx;
+  color: $color-white;
+}
+
+.amountRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.amountSign {
+  font-size: 48rpx;
+  font-weight: $font-weight-medium;
+  opacity: 0.9;
+}
+
+.amount {
+  font-size: 72rpx;
+  font-weight: $font-weight-bold;
+  line-height: 1;
+}
+
+.recurringBadge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8rpx 20rpx;
+  border-radius: 100rpx;
+  margin-left: $spacing-sm;
+}
+
+.recurringText {
+  font-size: $font-size-xs;
+  color: $color-white;
+  font-weight: $font-weight-medium;
+}
+
+.editAmountRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.currency {
+  font-size: 48rpx;
+  font-weight: $font-weight-medium;
+  opacity: 0.9;
+}
+
+.editAmountInput {
+  flex: 1;
+  font-size: 72rpx;
+  font-weight: $font-weight-bold;
+  color: $color-white;
+  background: transparent;
+  min-width: 200rpx;
+}
+
+.editForm {
+  padding: $spacing-lg $spacing-md 0;
+}
+
+.typeTabs {
+  display: flex;
+  background: $color-bg-card;
+  border-radius: 16rpx;
+  padding: 8rpx;
+  margin-bottom: $spacing-xl;
+}
+
+.typeTab {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-md;
+  border-radius: 12rpx;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  color: $color-text-secondary;
+  transition: all 0.2s;
+
+  &.active {
+    background: $color-primary;
+    color: $color-white;
+  }
+
+  &:active {
+    opacity: 0.7;
+  }
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.categoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+  max-height: 400rpx;
+}
+
+.categoryItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-md $spacing-sm;
+  border-radius: 16rpx;
+  background: $color-bg-card;
+  border: 3rpx solid transparent;
+  transition: all 0.2s;
+
+  &.selected {
+    border-color: $color-primary;
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.categoryName {
+  font-size: $font-size-xs;
+  color: $color-text-primary;
+}
+
+.formGroup {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg 0;
+  border-bottom: 1rpx solid $color-border-light;
+}
+
+.label {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+}
+
+.pickerValue {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.arrow {
+  color: $color-text-tertiary;
+  font-size: $font-size-xl;
+}
+
+.textarea {
+  flex: 1;
+  min-height: 120rpx;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  background: $color-bg-card;
+  border-radius: 12rpx;
+  padding: $spacing-md;
+  text-align: left;
+}
+
+.actionButtons {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-2xl;
+}
+
+.cancelBtn, .saveBtn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  border: none;
+}
+
+.cancelBtn {
+  background: $color-bg-card;
+  color: $color-text-secondary;
+}
+
+.saveBtn {
+  background: $color-primary;
+  color: $color-white;
+}
+
+.detailList {
+  padding: $spacing-lg $spacing-md 0;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-lg 0;
+  border-bottom: 1rpx solid $color-border-light;
+}
+
+.detailLabel {
+  font-size: $font-size-md;
+  color: $color-text-secondary;
+  flex-shrink: 0;
+}
+
+.detailValueRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+
+.detailValue {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  text-align: right;
+  max-width: 400rpx;
+  word-break: break-all;
+}
+
+.accountDot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+}
+
+.recurringTag {
+  background: $color-tag-bg;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+.recurringTagText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.photo {
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 16rpx;
+}
+
+.bottomActions {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-lg $spacing-md;
+  background: $color-bg-card;
+  border-top: 1rpx solid $color-border-light;
+}
+
+.editBtn, .deleteBtn {
+  flex: 1;
+  height: 88rpx;
+  border-radius: 44rpx;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-medium;
+  border: none;
+}
+
+.editBtn {
+  background: $color-primary;
+  color: $color-white;
+}
+
+.deleteBtn {
+  background: rgba(239, 68, 68, 0.1);
+  color: $color-expense;
+}
+
+.empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: $spacing-xl;
-  text-align: center;
+  padding: 200rpx 0;
 }
 
-.icon {
+.emptyIcon {
   font-size: 120rpx;
   opacity: 0.3;
   margin-bottom: $spacing-lg;
 }
 
-.title {
-  font-size: $font-size-xl;
-  font-weight: $font-weight-semibold;
-  color: $color-text-primary;
-  margin-bottom: $spacing-md;
+.emptyText {
+  font-size: $font-size-lg;
+  color: $color-text-tertiary;
+  margin-bottom: $spacing-xl;
 }
 
-.subtitle {
+.backBtn {
+  background: $color-primary;
+  color: $color-white;
+  border-radius: 44rpx;
+  height: 80rpx;
+  padding: 0 $spacing-xl;
   font-size: $font-size-md;
-  color: $color-text-tertiary;
+  border: none;
 }

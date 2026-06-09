@@ -221,6 +221,29 @@ const RecordPage: React.FC = () => {
             </View>
           </Picker>
 
+          <Picker
+            mode="selector"
+            range={['不重复', '每天', '每周', '每月', '每年']}
+            value={recurring === 'none' ? 0 : recurring === 'daily' ? 1 : recurring === 'weekly' ? 2 : recurring === 'monthly' ? 3 : 4}
+            onChange={(e) => {
+              const values: RecurringType[] = ['none', 'daily', 'weekly', 'monthly', 'yearly'];
+              setRecurring(values[parseInt(e.detail.value)]);
+            }}
+          >
+            <View className={styles.formItem}>
+              <View className={styles.formLabel}>
+                <Text>🔄</Text>
+                <Text>重复</Text>
+              </View>
+              <View className={styles.formValue}>
+                <Text className={recurring !== 'none' ? styles.recurringActive : ''}>
+                  {recurring === 'none' ? '不重复' : recurring === 'daily' ? '每天' : recurring === 'weekly' ? '每周' : recurring === 'monthly' ? '每月' : '每年'}
+                </Text>
+                <Text>›</Text>
+              </View>
+            </View>
+          </Picker>
+
           <View className={styles.formItem}>
             <View className={styles.formLabel}>
               <Text>📝</Text>

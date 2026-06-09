@@ -2,28 +2,378 @@
 
 .page {
   min-height: 100vh;
+  background: $color-bg;
+  padding-bottom: 120rpx;
+}
+
+.header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: $spacing-xl;
-  text-align: center;
+  justify-content: space-between;
+  padding: $spacing-xl $page-padding;
+  padding-top: calc(#{$spacing-xl} + env(safe-area-inset-top));
+  background: $color-bg-card;
 }
 
-.icon {
-  font-size: 120rpx;
-  opacity: 0.3;
-  margin-bottom: $spacing-lg;
-}
-
-.title {
+.headerTitle {
   font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+}
+
+.createBtn {
+  @include button-reset;
+  height: 64rpx;
+  padding: 0 $spacing-lg;
+  background: $color-primary;
+  color: $color-white;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: 32rpx;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.ledgerList {
+  display: flex;
+  gap: $spacing-md;
+  padding: $spacing-lg $page-padding;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.ledgerCard {
+  flex-shrink: 0;
+  width: 280rpx;
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-md;
+  border: 3rpx solid transparent;
+  transition: all 0.2s;
+
+  &.active {
+    border-color: $color-primary;
+    box-shadow: 0 8rpx 24rpx rgba($color-primary, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.ledgerHeader {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-sm;
+}
+
+.ledgerColorDot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+}
+
+.ledgerName {
+  flex: 1;
+  font-size: $font-size-md;
   font-weight: $font-weight-semibold;
   color: $color-text-primary;
+}
+
+.memberCount {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4rpx 12rpx;
+  border-radius: 100rpx;
+}
+
+.memberIcon {
+  font-size: 20rpx;
+}
+
+.memberCountText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.ledgerDesc {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  line-height: 1.4;
+}
+
+.memberSection {
+  padding: 0 $page-padding;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: $spacing-md;
 }
 
-.subtitle {
+.sectionTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.addMemberBtn {
+  @include button-reset;
+  height: 56rpx;
+  padding: 0 $spacing-md;
+  background: rgba($color-primary, 0.1);
+  color: $color-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  border-radius: 28rpx;
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.memberList {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  overflow: hidden;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-lg;
+  border-bottom: 1rpx solid $color-border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.memberAvatar {
+  width: 88rpx;
+  height: 88rpx;
+  background: $color-bg;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  flex-shrink: 0;
+}
+
+.memberInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.memberNameRow {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: 4rpx;
+}
+
+.memberName {
   font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.ownerBadge {
+  font-size: $font-size-xs;
+  color: $color-budget;
+  background: rgba($color-budget, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 100rpx;
+}
+
+.memberRole {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: 4rpx;
+}
+
+.memberJoined {
+  font-size: $font-size-xs;
   color: $color-text-tertiary;
+}
+
+.memberActions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  flex-shrink: 0;
+}
+
+.roleBtn, .removeBtn {
+  @include button-reset;
+  height: 52rpx;
+  padding: 0 $spacing-md;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  border-radius: 26rpx;
+}
+
+.roleBtn {
+  background: rgba($color-primary, 0.1);
+  color: $color-primary;
+}
+
+.removeBtn {
+  background: rgba($color-expense, 0.1);
+  color: $color-expense;
+}
+
+.modalContent {
+  padding: $spacing-md 0;
+}
+
+.modalLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  margin-bottom: $spacing-sm;
+  display: block;
+}
+
+.modalInput {
+  width: 100%;
+  height: 80rpx;
+  border: 2rpx solid $color-border-light;
+  border-radius: $radius-md;
+  padding: 0 $spacing-md;
+  font-size: $font-size-lg;
+  color: $color-text-primary;
+  margin-bottom: $spacing-lg;
+}
+
+.colorPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.colorOption {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  border: 4rpx solid transparent;
+  transition: all 0.2s;
+
+  &.selected {
+    border-color: $color-white;
+    box-shadow: 0 0 0 4rpx $color-primary;
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+.avatarPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.avatarOption {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: $color-bg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3rpx solid transparent;
+  transition: all 0.2s;
+
+  &.selected {
+    border-color: $color-primary;
+    background: rgba($color-primary, 0.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.avatarEmoji {
+  font-size: 40rpx;
+}
+
+.pickerValue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md;
+  background: $color-bg;
+  border-radius: $radius-md;
+  margin-bottom: $spacing-lg;
+  font-size: $font-size-md;
+  color: $color-text-primary;
+}
+
+.arrow {
+  color: $color-text-tertiary;
+  font-size: $font-size-xl;
+}
+
+.roleList {
+  background: $color-bg;
+  border-radius: $radius-md;
+  overflow: hidden;
+}
+
+.roleOption {
+  display: flex;
+  align-items: center;
+  padding: $spacing-lg $spacing-md;
+  border-bottom: 1rpx solid $color-border-light;
+  transition: all 0.2s;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.selected {
+    background: rgba($color-primary, 0.05);
+  }
+
+  &:active {
+    background: $color-bg-hover;
+  }
+}
+
+.roleName {
+  flex: 1;
+  font-size: $font-size-md;
+  font-weight: $font-weight-medium;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.roleDesc {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.checkIcon {
+  font-size: $font-size-xl;
+  color: $color-primary;
+  font-weight: $font-weight-bold;
 }

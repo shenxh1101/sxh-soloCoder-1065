@@ -1,8 +1,10 @@
-import React, { useMemo } from 'react';
-import { View, Text, ScrollView, Button } from '@tarojs/components';
+import React, { useState, useMemo } from 'react';
+import { View, Text, ScrollView, Button, Input, Picker, Modal } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import classnames from 'classnames';
 import { useFinanceStore } from '@/store/useFinanceStore';
 import { formatMoney } from '@/utils/format';
+import { Category } from '@/types';
 import CategoryIcon from '@/components/CategoryIcon';
 import ProgressBar from '@/components/ProgressBar';
 import styles from './index.module.scss';
@@ -12,9 +14,21 @@ const BudgetPage: React.FC = () => {
   const getTotalBudget = useFinanceStore((state) => state.getTotalBudget);
   const getCategoryBudgets = useFinanceStore((state) => state.getCategoryBudgets);
   const getCategory = useFinanceStore((state) => state.getCategory);
+  const getCategories = useFinanceStore((state) => state.getCategories);
+  const updateTotalBudget = useFinanceStore((state) => state.updateTotalBudget);
+  const addCategoryBudget = useFinanceStore((state) => state.addCategoryBudget);
+  const updateCategoryBudget = useFinanceStore((state) => state.updateCategoryBudget);
 
   const totalBudget = getTotalBudget();
   const categoryBudgets = getCategoryBudgets();
+  const expenseCategories = useMemo(() => getCategories('expense'), [getCategories]);
+
+  const [showEditTotalModal, setShowEditTotalModal] = useState(false);
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+  const [totalBudgetAmount, setTotalBudgetAmount] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
+  const [categoryBudgetAmount, setCategoryBudgetAmount] = useState('');
+  const [editingBudget, setEditingBudget] = useState<string | null>(null);
 
   const totalStatus = useMemo(() => {
     if (!totalBudget) return { status: 'normal', text: '正常' };
@@ -32,14 +46,67 @@ const BudgetPage: React.FC = () => {
   };
 
   const handleEditBudget = () => {
-    Taro.showToast({ title: '编辑功能开发中', icon: 'none' });
-    console.log('[Budget] Edit budget clicked');
+    setTotalBudgetAmount(totalBudget?.amount.toString() || '');
+    setShowEditTotalModal(true);
+  };
+
+  const handleSaveTotalBudget = () => {
+    const amount = parseFloat(totalBudgetAmount);
+    if (isNaN(amount) || amount <= 0) {
+      Taro.showToast({ title: '请输入有效金额', icon: 'none' });
+      return;
+    }
+    updateTotalBudget(amount);
+    setShowEditTotalModal(false);
+    Taro.showToast({ title: '保存成功', icon: 'success' });
   };
 
   const handleAddBudget = () => {
-    Taro.showToast({ title: '添加分类预算', icon: 'none' });
-    console.log('[Budget] Add category budget clicked');
+    setSelectedCategoryId('');
+    setCategoryBudgetAmount('');
+    setEditingBudget(null);
+    setShowAddCategoryModal(true);
   };
+
+  const handleEditCategoryBudget = (budgetId: string, categoryId: string, amount: number) => {
+    setSelectedCategoryId(categoryId);
+    setCategoryBudgetAmount(amount.toString());
+    setEditingBudget(budgetId);
+    setShowAddCategoryModal(true);
+  };
+
+  const handleSaveCategoryBudget = () => {
+    const amount = parseFloat(categoryBudgetAmount);
+    if (!selectedCategoryId) {
+      Taro.showToast({ title: '请选择分类', icon: 'none' });
+      return;
+    }
+    if (isNaN(amount) || amount <= 0) {
+      Taro.showToast({ title: '请输入有效金额', icon: 'none' });
+      return;
+    }
+
+    if (editingBudget) {
+      updateCategoryBudget(editingBudget, amount);
+    } else {
+      addCategoryBudget(selectedCategoryId, amount);
+    }
+
+    setShowAddCategoryModal(false);
+    Taro.showToast({ title: '保存成功', icon: 'success' });
+  };
+
+  const selectedCategory = selectedCategoryId ? getCategory(selectedCategoryId) : null;
+  const availableCategories = useMemo(() => {
+    const budgetedCategoryIds = new Set(categoryBudgets.map(b => b.categoryId));
+    if (editingBudget) {
+      const current = categoryBudgets.find(b => b.id === editingBudget);
+      return expenseCategories.filter(c => 
+        !budgetedCategoryIds.has(c.id) || c.id === current?.categoryId
+      );
+    }
+    return expenseCategories.filter(c => !budgetedCategoryIds.has(c.id));
+  }, [expenseCategories, categoryBudgets, editingBudget]);
 
   return (
     <ScrollView className={styles.page} scrollY>
@@ -67,7 +134,7 @@ const BudgetPage: React.FC = () => {
           <View className={styles.sectionHeader}>
             <Text className={styles.sectionTitle}>总预算进度</Text>
             <Button className={styles.editBtn} onClick={handleEditBudget}>
-              编辑
+              {totalBudget ? '编辑' : '设置'}
             </Button>
           </View>
 
@@ -144,9 +211,13 @@ const BudgetPage: React.FC = () => {
                 const remaining = budget.amount - budget.spent;
 
                 return (
-                  <View key={budget.id} className={styles.categoryItem}>
+                  <View 
+                    key={budget.id} 
+                    className={styles.categoryItem}
+                    onClick={() => handleEditCategoryBudget(budget.id, budget.categoryId!, budget.amount)}
+                  >
                     {category && (
-                      <CategoryIcon icon={category.icon} color={category.color} size="md" />
+                      <CategoryIcon category={category} size="md" />
                     )}
                     <View className={styles.categoryInfo}>
                       <View className={styles.categoryTop}>
@@ -189,6 +260,7 @@ const BudgetPage: React.FC = () => {
                         </Text>
                       </View>
                     </View>
+                    <Text className={styles.editArrow}>›</Text>
                   </View>
                 );
               })}
@@ -205,6 +277,72 @@ const BudgetPage: React.FC = () => {
           )}
         </View>
       </View>
+
+      <Modal
+        title={totalBudget ? '编辑总预算' : '设置本月总预算'}
+        onCancel={() => setShowEditTotalModal(false)}
+        onConfirm={handleSaveTotalBudget}
+        show={showEditTotalModal}
+        cancelText='取消'
+        confirmText='保存'
+      >
+        <View className={styles.modalContent}>
+          <Text className={styles.modalLabel}>预算金额 (元)</Text>
+          <Input
+            className={styles.modalInput}
+            type='digit'
+            value={totalBudgetAmount}
+            onInput={(e) => setTotalBudgetAmount(e.detail.value)}
+            placeholder='请输入预算金额'
+            focus
+          />
+        </View>
+      </Modal>
+
+      <Modal
+        title={editingBudget ? '编辑分类预算' : '添加分类预算'}
+        onCancel={() => setShowAddCategoryModal(false)}
+        onConfirm={handleSaveCategoryBudget}
+        show={showAddCategoryModal}
+        cancelText='取消'
+        confirmText='保存'
+      >
+        <View className={styles.modalContent}>
+          <Text className={styles.modalLabel}>选择分类</Text>
+          {selectedCategory ? (
+            <View 
+              className={styles.selectedCategory}
+              onClick={() => setSelectedCategoryId('')}
+            >
+              <CategoryIcon category={selectedCategory} size='md' />
+              <Text className={styles.selectedCategoryName}>{selectedCategory.name}</Text>
+              <Text className={styles.changeBtn}>更换</Text>
+            </View>
+          ) : (
+            <ScrollView className={styles.categoryPicker} scrollY>
+              {availableCategories.map((cat) => (
+                <View
+                  key={cat.id}
+                  className={classnames(styles.categoryOption, selectedCategoryId === cat.id && styles.selected)}
+                  onClick={() => setSelectedCategoryId(cat.id)}
+                >
+                  <CategoryIcon category={cat} size='sm' />
+                  <Text className={styles.categoryOptionName}>{cat.name}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          )}
+
+          <Text className={styles.modalLabel}>预算金额 (元)</Text>
+          <Input
+            className={styles.modalInput}
+            type='digit'
+            value={categoryBudgetAmount}
+            onInput={(e) => setCategoryBudgetAmount(e.detail.value)}
+            placeholder='请输入预算金额'
+          />
+        </View>
+      </Modal>
     </ScrollView>
   );
 };

@@ -181,6 +181,11 @@
   gap: $spacing-xs;
 }
 
+.recurringActive {
+  color: $color-primary;
+  font-weight: $font-weight-medium;
+}
+
 .noteInput {
   flex: 1;
   text-align: right;

@@ -1,4 +1,16 @@
 import dayjs from 'dayjs';
+import { RecurringType } from '@/types';
+
+export const formatRecurring = (type: RecurringType): string => {
+  const map: Record<RecurringType, string> = {
+    none: '',
+    daily: '每天',
+    weekly: '每周',
+    monthly: '每月',
+    yearly: '每年',
+  };
+  return map[type];
+};
 
 export const formatMoney = (amount: number, showSign = false): string => {
   const formatted = Math.abs(amount).toFixed(2);

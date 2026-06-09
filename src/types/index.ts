@@ -69,3 +69,23 @@ export interface DailyTrend {
   income: number;
   expense: number;
 }
+
+export type MemberRole = 'owner' | 'editor' | 'viewer';
+
+export interface LedgerMember {
+  id: string;
+  nickname: string;
+  avatar: string;
+  role: MemberRole;
+  joinedAt: string;
+}
+
+export interface SharedLedger {
+  id: string;
+  name: string;
+  description: string;
+  ownerId: string;
+  members: LedgerMember[];
+  createdAt: string;
+  color: string;
+}
