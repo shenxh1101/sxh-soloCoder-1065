@@ -1,0 +1,29 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  width: 100%;
+}
+
+.legend {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.legendDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+}
+
+.legendText {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}

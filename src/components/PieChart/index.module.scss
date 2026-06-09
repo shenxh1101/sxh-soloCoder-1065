@@ -1,0 +1,72 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+}
+
+.chartWrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.centerText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.centerLabel {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.centerValue {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-top: $spacing-xs;
+}
+
+.legend {
+  flex: 1;
+  min-width: 0;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.legendDot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: $radius-round;
+  flex-shrink: 0;
+}
+
+.legendInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.legendName {
+  font-size: $font-size-sm;
+  color: $color-text-primary;
+  @include text-ellipsis;
+}
+
+.legendValue {
+  font-size: $font-size-xs;
+  color: $color-text-tertiary;
+  margin-top: 2rpx;
+}

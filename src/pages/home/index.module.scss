@@ -1,0 +1,208 @@
+@use '@/styles/variables.scss' as *;
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 120rpx;
+}
+
+.header {
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  padding: $spacing-xl $spacing-lg $spacing-xxl;
+  border-radius: 0 0 $radius-xl $radius-xl;
+  margin: 0 (-$page-padding);
+}
+
+.greeting {
+  color: rgba($color-text-white, 0.9);
+  font-size: $font-size-md;
+  margin-bottom: $spacing-sm;
+}
+
+.assetCard {
+  color: $color-text-white;
+  
+  .label {
+    font-size: $font-size-sm;
+    opacity: 0.9;
+  }
+  
+  .amount {
+    font-size: 64rpx;
+    font-weight: $font-weight-bold;
+    margin-top: $spacing-xs;
+    letter-spacing: 2rpx;
+  }
+  
+  .subtitle {
+    font-size: $font-size-sm;
+    opacity: 0.8;
+    margin-top: $spacing-sm;
+  }
+}
+
+.content {
+  margin-top: -$spacing-xl;
+}
+
+.statsRow {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.card {
+  background: $color-bg-card;
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  box-shadow: $shadow-card;
+  margin-bottom: $spacing-md;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-lg;
+}
+
+.cardTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.moreLink {
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+}
+
+.budgetRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.budgetLabel {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.budgetValue {
+  font-size: $font-size-md;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+  
+  &.warning { color: $color-warning; }
+  &.danger { color: $color-error; }
+}
+
+.budgetRemaining {
+  margin-top: $spacing-md;
+  text-align: center;
+  
+  .remainingLabel {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+  
+  .remainingValue {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-primary;
+    margin-top: $spacing-xs;
+  }
+}
+
+.topCategories {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.topCategoryItem {
+  flex: 1;
+  text-align: center;
+  padding: $spacing-md;
+  background: $color-bg-hover;
+  border-radius: $radius-md;
+  
+  .catName {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-top: $spacing-sm;
+  }
+  
+  .catAmount {
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin-top: $spacing-xs;
+  }
+}
+
+.quickAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  color: $color-text-white;
+  padding: $spacing-lg;
+  border-radius: $radius-lg;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  box-shadow: 0 8rpx 24rpx rgba($color-primary, 0.3);
+  margin-bottom: $spacing-md;
+  transition: all $transition-base;
+  
+  &:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  
+  .icon {
+    font-size: 40rpx;
+  }
+}
+
+.billList {
+  margin-top: $spacing-md;
+}
+
+.dateGroup {
+  margin-bottom: $spacing-lg;
+}
+
+.dateHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+  
+  .dateText {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+  }
+  
+  .dateSummary {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: $spacing-xxl $spacing-lg;
+  
+  .emptyIcon {
+    font-size: 80rpx;
+    opacity: 0.3;
+  }
+  
+  .emptyText {
+    font-size: $font-size-md;
+    color: $color-text-tertiary;
+    margin-top: $spacing-md;
+  }
+}
