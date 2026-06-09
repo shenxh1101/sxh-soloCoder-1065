@@ -14,20 +14,21 @@ const ReportPage: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState(dayjs().format('YYYY-MM'));
   const [pieType, setPieType] = useState<BillType>('expense');
 
+  const bills = useFinanceStore((state) => state.bills);
   const getSummary = useFinanceStore((state) => state.getSummary);
   const getCategoryStats = useFinanceStore((state) => state.getCategoryStats);
   const getDailyTrend = useFinanceStore((state) => state.getDailyTrend);
   const getBillsByMonth = useFinanceStore((state) => state.getBillsByMonth);
 
-  const summary = getSummary(currentMonth);
-  const categoryStats = useMemo(() => getCategoryStats(pieType, currentMonth), [getCategoryStats, pieType, currentMonth]);
-  const dailyTrend = useMemo(() => getDailyTrend(currentMonth), [getDailyTrend, currentMonth]);
-  const allBills = getBillsByMonth(currentMonth);
+  const summary = useMemo(() => getSummary(currentMonth), [getSummary, currentMonth, bills]);
+  const categoryStats = useMemo(() => getCategoryStats(pieType, currentMonth), [getCategoryStats, pieType, currentMonth, bills]);
+  const dailyTrend = useMemo(() => getDailyTrend(currentMonth), [getDailyTrend, currentMonth, bills]);
+  const allBills = useMemo(() => getBillsByMonth(currentMonth), [getBillsByMonth, currentMonth, bills]);
 
   const topExpenseCategory = useMemo(() => {
     const stats = getCategoryStats('expense', currentMonth);
     return stats.length > 0 ? stats[0] : null;
-  }, [getCategoryStats, currentMonth]);
+  }, [getCategoryStats, currentMonth, bills]);
 
   const handlePrevMonth = () => {
     setCurrentMonth(dayjs(currentMonth).subtract(1, 'month').format('YYYY-MM'));

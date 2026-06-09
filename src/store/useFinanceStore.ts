@@ -163,8 +163,29 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
   },
 
   getBudgets: () => get().budgets,
-  getTotalBudget: () => get().budgets.find(b => !b.categoryId),
-  getCategoryBudgets: () => get().budgets.filter(b => b.categoryId),
+  
+  getTotalBudget: () => {
+    const budget = get().budgets.find(b => !b.categoryId);
+    if (!budget) return undefined;
+    const summary = get().getSummary();
+    return { ...budget, spent: summary.totalExpense };
+  },
+  
+  getCategoryBudgets: () => {
+    const month = get().currentMonth;
+    const bills = get().getBillsByMonth(month).filter(b => b.type === 'expense');
+    const categorySpent: Record<string, number> = {};
+    bills.forEach(b => {
+      categorySpent[b.categoryId] = (categorySpent[b.categoryId] || 0) + b.amount;
+    });
+    
+    return get().budgets
+      .filter(b => b.categoryId)
+      .map(b => ({
+        ...b,
+        spent: categorySpent[b.categoryId!] || 0,
+      }));
+  },
   
   updateTotalBudget: (amount) => {
     const month = get().currentMonth;
@@ -181,7 +202,7 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
         id: `budget_${Date.now()}`,
         amount,
         month,
-        spent: get().getSummary().totalExpense,
+        spent: 0,
       };
       set((state) => ({ budgets: [...state.budgets, newBudget] }));
     }
@@ -199,17 +220,12 @@ export const useFinanceStore = create<FinanceState>((set, get) => ({
         ),
       }));
     } else {
-      const categoryBills = get().getBillsByMonth(month).filter(
-        b => b.type === 'expense' && b.categoryId === categoryId
-      );
-      const spent = categoryBills.reduce((sum, b) => sum + b.amount, 0);
-      
       const newBudget: Budget = {
         id: `budget_${Date.now()}`,
         categoryId,
         amount,
         month,
-        spent,
+        spent: 0,
       };
       set((state) => ({ budgets: [...state.budgets, newBudget] }));
     }

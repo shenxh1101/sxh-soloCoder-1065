@@ -10,6 +10,8 @@ import ProgressBar from '@/components/ProgressBar';
 import styles from './index.module.scss';
 
 const HomePage: React.FC = () => {
+  const bills = useFinanceStore((state) => state.bills);
+  const budgets = useFinanceStore((state) => state.budgets);
   const currentMonth = useFinanceStore((state) => state.currentMonth);
   const getTotalBalance = useFinanceStore((state) => state.getTotalBalance);
   const getSummary = useFinanceStore((state) => state.getSummary);
@@ -19,11 +21,11 @@ const HomePage: React.FC = () => {
   const getCategory = useFinanceStore((state) => state.getCategory);
 
   const totalBalance = getTotalBalance();
-  const summary = getSummary(currentMonth);
-  const bills = getBillsByMonth(currentMonth).slice(0, 5);
-  const budget = getTotalBudget();
-  const expenseStats = getCategoryStats('expense', currentMonth).slice(0, 3);
-  const billsByDate = useMemo(() => groupBillsByDate(bills), [bills]);
+  const summary = useMemo(() => getSummary(currentMonth), [getSummary, currentMonth, bills]);
+  const recentBills = useMemo(() => getBillsByMonth(currentMonth).slice(0, 5), [getBillsByMonth, currentMonth, bills]);
+  const budget = useMemo(() => getTotalBudget(), [getTotalBudget, bills, budgets]);
+  const expenseStats = useMemo(() => getCategoryStats('expense', currentMonth).slice(0, 3), [getCategoryStats, currentMonth, bills]);
+  const billsByDate = useMemo(() => groupBillsByDate(recentBills), [recentBills]);
 
   const goToRecord = () => {
     Taro.switchTab({ url: '/pages/record/index' });
@@ -132,7 +134,7 @@ const HomePage: React.FC = () => {
             <Text className={styles.moreLink} onClick={goToLedger}>查看全部 ›</Text>
           </View>
           <View className={styles.billList}>
-            {bills.length === 0 ? (
+            {recentBills.length === 0 ? (
               <View className={styles.emptyState}>
                 <Text className={styles.emptyIcon}>📝</Text>
                 <Text className={styles.emptyText}>暂无账单，点击上方记一笔</Text>

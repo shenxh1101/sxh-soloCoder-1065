@@ -11,7 +11,7 @@ const BillDetailPage: React.FC = () => {
   const router = useRouter();
   const billId = router.params.id as string;
 
-  const getBillById = useFinanceStore((state) => state.getBillById);
+  const bills = useFinanceStore((state) => state.bills);
   const updateBill = useFinanceStore((state) => state.updateBill);
   const deleteBill = useFinanceStore((state) => state.deleteBill);
   const getCategory = useFinanceStore((state) => state.getCategory);
@@ -19,7 +19,7 @@ const BillDetailPage: React.FC = () => {
   const getAccounts = useFinanceStore((state) => state.getAccounts);
   const getAccountById = useFinanceStore((state) => state.getAccountById);
 
-  const bill = useMemo(() => getBillById(billId), [billId, getBillById, useDidShow]);
+  const bill = useMemo(() => bills.find(b => b.id === billId), [bills, billId]);
   const categories = useMemo(() => bill ? getCategories(bill.type) : [], [bill, getCategories]);
   const accounts = getAccounts();
 

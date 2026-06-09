@@ -13,11 +13,12 @@ const LedgerPage: React.FC = () => {
   const [filterType, setFilterType] = useState<'all' | 'expense' | 'income'>('all');
   const [currentMonth, setCurrentMonth] = useState(dayjs().format('YYYY-MM'));
 
+  const bills = useFinanceStore((state) => state.bills);
   const getBillsByMonth = useFinanceStore((state) => state.getBillsByMonth);
   const getSummary = useFinanceStore((state) => state.getSummary);
 
-  const allBills = useMemo(() => getBillsByMonth(currentMonth), [getBillsByMonth, currentMonth]);
-  const summary = getSummary(currentMonth);
+  const allBills = useMemo(() => getBillsByMonth(currentMonth), [getBillsByMonth, currentMonth, bills]);
+  const summary = useMemo(() => getSummary(currentMonth), [getSummary, currentMonth, bills]);
 
   const filteredBills = useMemo(() => {
     let bills = allBills;

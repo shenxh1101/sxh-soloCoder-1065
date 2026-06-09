@@ -10,6 +10,8 @@ import ProgressBar from '@/components/ProgressBar';
 import styles from './index.module.scss';
 
 const BudgetPage: React.FC = () => {
+  const bills = useFinanceStore((state) => state.bills);
+  const budgets = useFinanceStore((state) => state.budgets);
   const currentMonth = useFinanceStore((state) => state.currentMonth);
   const getTotalBudget = useFinanceStore((state) => state.getTotalBudget);
   const getCategoryBudgets = useFinanceStore((state) => state.getCategoryBudgets);
@@ -19,8 +21,8 @@ const BudgetPage: React.FC = () => {
   const addCategoryBudget = useFinanceStore((state) => state.addCategoryBudget);
   const updateCategoryBudget = useFinanceStore((state) => state.updateCategoryBudget);
 
-  const totalBudget = getTotalBudget();
-  const categoryBudgets = getCategoryBudgets();
+  const totalBudget = useMemo(() => getTotalBudget(), [getTotalBudget, bills, budgets]);
+  const categoryBudgets = useMemo(() => getCategoryBudgets(), [getCategoryBudgets, bills, budgets]);
   const expenseCategories = useMemo(() => getCategories('expense'), [getCategories]);
 
   const [showEditTotalModal, setShowEditTotalModal] = useState(false);
